@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Статистика водителя</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h1 { font-size: 24px; margin-bottom: 16px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .buttons { display: flex; gap: 8px; margin-top: 16px; }
+    button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
+    button:focus { outline: 2px solid #007bff; }
+  </style>
+  <!-- 1) Подключаем SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <h1>Добро пожаловать, Иванов И.И.</h1>
+
+  <div class="card">
+    <strong>Рейсы в этом месяце:</strong> 12
+  </div>
+  <div class="card">
+    <strong>Вывезено тонн:</strong> 184.5
+  </div>
+  <div class="card">
+    <strong>Километраж:</strong> 3 210 км
+  </div>
+
+  <div class="buttons">
+    <button onclick="showCurrentMonth()">Текущий месяц</button>
+    <button onclick="showPreviousMonth()">Предыдущий месяц</button>
+    <button onclick="choosePeriod()">Выбрать период</button>
+  </div>
+
+  <script>
+    // 2) Получаем ссылку на SDK
+    const tg = window.Telegram.WebApp;
+    tg.ready(); // говорим Telegram, что WebApp готов
+
+    function showCurrentMonth() {
+      tg.sendData(JSON.stringify({ action: 'period', period: 'current' }));
+    }
+
+    function showPreviousMonth() {
+      tg.sendData(JSON.stringify({ action: 'period', period: 'previous' }));
+    }
+
+    function choosePeriod() {
+      const period = prompt('Введите период в формате YYYY-MM (например, 2024-03):');
+      if (period) {
+        tg.sendData(JSON.stringify({ action: 'period', period }));
+      } else {
+        tg.sendData(JSON.stringify({ action: 'period', period: null }));
+      }
+    }
+  </script>
+</body>
+</html>
